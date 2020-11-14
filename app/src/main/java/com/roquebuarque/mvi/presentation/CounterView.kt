@@ -1,11 +1,9 @@
 package com.roquebuarque.mvi.presentation
 
+import com.roquebuarque.mvi.data.CounterModel
+
 interface CounterView {
 
-    fun updateCounter(value: Int)
-
-    fun loading(isLoading: Boolean)
-
-    fun error(msg: String)
+    fun render(model: CounterModel)
 
 }

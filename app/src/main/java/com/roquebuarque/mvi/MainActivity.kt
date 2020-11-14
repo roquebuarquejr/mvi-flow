@@ -3,6 +3,7 @@ package com.roquebuarque.mvi
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.view.isVisible
+import com.roquebuarque.mvi.data.CounterModel
 import com.roquebuarque.mvi.presentation.CounterPresenter
 import com.roquebuarque.mvi.presentation.CounterView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -25,15 +26,11 @@ class MainActivity : AppCompatActivity(), CounterView {
         }
     }
 
-    override fun updateCounter(value: Int) {
-        txtCounter.text = value.toString()
-    }
-
-    override fun loading(isLoading: Boolean) {
-        progressBar.isVisible = isLoading
-    }
-
-    override fun error(msg: String) {
-        txtCounter.text = msg
+    override fun render(model: CounterModel) {
+        progressBar.isVisible = model.isLoading
+        txtCounter.text = model.counter?.value?.toString() ?: ""
+        model.throwable?.let {
+            txtCounter.text = it.message
+        }
     }
 }
