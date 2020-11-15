@@ -13,10 +13,23 @@ class CounterViewModel: ViewModel() {
     val loading = MutableLiveData<Boolean>()
     val content = MutableLiveData<Int>()
 
-
     fun increase(){
         loading.value = true
         repository.increase(object : CounterCallback{
+            override fun onSuccess(counter: Counter) {
+                loading.value = false
+                content.value = counter.value
+            }
+            override fun onError(throwable: Throwable) {
+                loading.value = false
+                error.value = throwable.message ?: "error"
+            }
+        })
+    }
+
+    fun decrease(){
+        loading.value = true
+        repository.decrease(object : CounterCallback{
             override fun onSuccess(counter: Counter) {
                 loading.value = false
                 content.value = counter.value

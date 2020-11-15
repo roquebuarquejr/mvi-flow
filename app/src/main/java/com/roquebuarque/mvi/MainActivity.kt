@@ -3,31 +3,45 @@ package com.roquebuarque.mvi
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.view.isVisible
-import com.roquebuarque.mvi.data.CounterModel
+import androidx.lifecycle.Observer
 import com.roquebuarque.mvi.data.CounterState
-import com.roquebuarque.mvi.presentation.CounterPresenter
-import com.roquebuarque.mvi.presentation.CounterView
+import com.roquebuarque.mvi.presentation.CounterViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), CounterView {
+class MainActivity : AppCompatActivity() {
 
-    private val presenter = CounterPresenter()
+    private val viewModel = CounterViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        presenter.start(this)
         btnIncrease.setOnClickListener {
-            presenter.increase()
+            viewModel.increase()
         }
 
         btnDecrease.setOnClickListener {
-            presenter.decrease()
+            viewModel.decrease()
         }
+
+        setupObserver()
     }
 
-    override fun render(state: CounterState) {
+    private fun setupObserver() {
+        viewModel.content.observe(this, Observer {
+            txtCounter.text = it.toString()
+        })
+
+        viewModel.error.observe(this, Observer {
+            txtCounter.text = it
+        })
+
+        viewModel.loading.observe(this, Observer {
+            progressBar.isVisible = it
+        })
+    }
+
+    private fun render(state: CounterState) {
         when(state){
             is CounterState.Loading ->  progressBar.isVisible = true
             is CounterState.Content -> {
