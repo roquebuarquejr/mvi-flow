@@ -28,7 +28,8 @@ class MainActivity : AppCompatActivity(), CounterView {
 
     override fun render(model: CounterModel) {
         progressBar.isVisible = model.isLoading
-        txtCounter.text = model.counter?.value?.toString() ?: ""
+        val count = model.counter?.value?.toString() ?: ""
+        txtCounter.text = count
         model.throwable?.let {
             txtCounter.text = it.message
         }

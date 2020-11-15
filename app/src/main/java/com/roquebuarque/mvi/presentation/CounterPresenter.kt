@@ -1,9 +1,6 @@
 package com.roquebuarque.mvi.presentation
 
-import com.roquebuarque.mvi.data.Counter
-import com.roquebuarque.mvi.data.CounterCallback
-import com.roquebuarque.mvi.data.CounterModel
-import com.roquebuarque.mvi.data.CounterRepository
+import com.roquebuarque.mvi.data.*
 
 class CounterPresenter {
 
@@ -15,28 +12,35 @@ class CounterPresenter {
     }
 
     fun increase() {
-        view.render(CounterModel(isLoading = true))
-        repository.increase(object : CounterCallback{
+        view.render(CounterState.Loading)
+        repository.increase(object : CounterCallback {
             override fun onSuccess(counter: Counter) {
-                view.render(CounterModel(counter = counter, isLoading = false))
+                view.render(CounterState.Content(counter))
             }
 
             override fun onError(throwable: Throwable) {
-                view.render(CounterModel(throwable = throwable, isLoading = false))
+                view.render(
+                    CounterState.Error(
+                        msg = throwable.message ?: "Error"
+                    )
+                )
             }
         })
     }
 
-    fun decrease(){
-        view.render(CounterModel(isLoading = true))
-
-        repository.decrease(object : CounterCallback{
+    fun decrease() {
+        view.render(CounterState.Loading)
+        repository.decrease(object : CounterCallback {
             override fun onSuccess(counter: Counter) {
-                view.render(CounterModel(counter = counter, isLoading = false))
+                view.render(CounterState.Content(counter))
             }
 
             override fun onError(throwable: Throwable) {
-                view.render(CounterModel(throwable = throwable, isLoading = false))
+                view.render(
+                    CounterState.Error(
+                        msg = throwable.message ?: "Error"
+                    )
+                )
             }
         })
     }
