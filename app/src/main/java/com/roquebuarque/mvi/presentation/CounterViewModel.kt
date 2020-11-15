@@ -1,45 +1,43 @@
 package com.roquebuarque.mvi.presentation
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.roquebuarque.mvi.data.Counter
-import com.roquebuarque.mvi.data.CounterCallback
-import com.roquebuarque.mvi.data.CounterRepository
+import com.roquebuarque.mvi.data.*
 
-class CounterViewModel: ViewModel() {
+class CounterViewModel : ViewModel() {
 
     private val repository = CounterRepository
-    val error = MutableLiveData<String>()
-    val loading = MutableLiveData<Boolean>()
-    val content = MutableLiveData<Int>()
+    private val _state = MutableLiveData<CounterState>()
+    val state: LiveData<CounterState> = _state
 
-    fun increase(){
-        loading.value = true
-        repository.increase(object : CounterCallback{
+    fun increase() {
+        _state.value = CounterState.Loading
+        repository.increase(object : CounterCallback {
             override fun onSuccess(counter: Counter) {
-                loading.value = false
-                content.value = counter.value
+                _state.value = CounterState.Content(counter.value)
             }
+
             override fun onError(throwable: Throwable) {
-                loading.value = false
-                error.value = throwable.message ?: "error"
+                _state.value = CounterState.Error(
+                    throwable.message ?: "error"
+                )
             }
         })
     }
 
-    fun decrease(){
-        loading.value = true
-        repository.decrease(object : CounterCallback{
+    fun decrease() {
+        _state.value = CounterState.Loading
+        repository.decrease(object : CounterCallback {
             override fun onSuccess(counter: Counter) {
-                loading.value = false
-                content.value = counter.value
+                _state.value = CounterState.Content(counter.value)
             }
 
             override fun onError(throwable: Throwable) {
-                loading.value = false
-                error.value = throwable.message ?: "error"
+                _state.value = CounterState.Error(
+                    throwable.message ?: "error"
+                )
             }
-
         })
     }
 

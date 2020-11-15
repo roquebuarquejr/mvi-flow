@@ -28,25 +28,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupObserver() {
-        viewModel.content.observe(this, Observer {
-            txtCounter.text = it.toString()
-        })
-
-        viewModel.error.observe(this, Observer {
-            txtCounter.text = it
-        })
-
-        viewModel.loading.observe(this, Observer {
-            progressBar.isVisible = it
+        viewModel.state.observe(this, Observer { state ->
+           render(state)
         })
     }
 
     private fun render(state: CounterState) {
-        when(state){
-            is CounterState.Loading ->  progressBar.isVisible = true
+        when (state) {
+            is CounterState.Loading -> progressBar.isVisible = true
             is CounterState.Content -> {
                 progressBar.isVisible = false
-                txtCounter.text = state.counter.value.toString()
+                txtCounter.text = state.value.toString()
             }
             is CounterState.Error -> {
                 progressBar.isVisible = false

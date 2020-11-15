@@ -1,14 +1,18 @@
 package com.roquebuarque.mvi.data
 
+import java.lang.IllegalArgumentException
+
 object CounterRepository {
 
-    private val counter = Counter(0)
+     val counter = Counter(0)
 
     fun increase(callback: CounterCallback) {
-        callback.onSuccess(counter.copy(value = counter.value++))
+        val newValue =  counter.value + 1
+        counter.value++
+        callback.onSuccess(counter.copy(value = newValue))
     }
 
     fun decrease(callback: CounterCallback) {
-        callback.onSuccess(counter.copy(value = counter.value--))
+        callback.onError(IllegalArgumentException("deu ruim"))
     }
 }

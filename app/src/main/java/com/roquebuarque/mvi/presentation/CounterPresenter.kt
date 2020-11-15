@@ -15,7 +15,7 @@ class CounterPresenter {
         view.render(CounterState.Loading)
         repository.increase(object : CounterCallback {
             override fun onSuccess(counter: Counter) {
-                view.render(CounterState.Content(counter))
+                view.render(CounterState.Content(counter.value))
             }
 
             override fun onError(throwable: Throwable) {
@@ -32,7 +32,7 @@ class CounterPresenter {
         view.render(CounterState.Loading)
         repository.decrease(object : CounterCallback {
             override fun onSuccess(counter: Counter) {
-                view.render(CounterState.Content(counter))
+                view.render(CounterState.Content(counter.value))
             }
 
             override fun onError(throwable: Throwable) {

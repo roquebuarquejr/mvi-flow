@@ -3,7 +3,7 @@ package com.roquebuarque.mvi.data
 sealed class CounterState {
 
     data class Content(
-        val counter: Counter
+        val value: Int
     ) : CounterState()
 
     object Loading : CounterState()
