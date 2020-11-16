@@ -1,18 +1,12 @@
 package com.roquebuarque.mvi.data
 
-sealed class CounterState {
+data class CounterState(
+    val counter: Counter,
+    val syncState: CounterSyncState
+)
 
-    data class Content(
-        val counter: Counter
-    ) : CounterState()
-
-    object Loading : CounterState()
-
-    data class Error(
-        val msg: String
-    ) : CounterState()
-
-    data class Message(
-        val msg: String
-    ) : CounterState()
+sealed class CounterSyncState {
+    object Loading : CounterSyncState()
+    object Content : CounterSyncState()
+    data class Message(val msg: String) : CounterSyncState()
 }
