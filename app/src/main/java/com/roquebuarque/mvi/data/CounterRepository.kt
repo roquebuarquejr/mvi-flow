@@ -1,18 +1,35 @@
 package com.roquebuarque.mvi.data
 
-import java.lang.IllegalArgumentException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 
+@FlowPreview
 object CounterRepository {
 
-     val counter = Counter(0)
+    private val _counter = MutableStateFlow(Counter(value = 0))
+    val counter: Flow<Counter> = _counter
 
-    fun increase(callback: CounterCallback) {
-        val newValue =  counter.value + 1
-        counter.value++
-        callback.onSuccess(counter.copy(value = newValue))
+    fun increase(oldValue: Int): Flow<Counter> {
+        return flow {
+            delay(2000)
+            val newValue = oldValue + 1
+            val counter = Counter(value = newValue)
+            _counter.emit(counter)
+            emit(counter)
+        }
+            .flowOn(Dispatchers.IO)
     }
 
-    fun decrease(callback: CounterCallback) {
-        callback.onError(IllegalArgumentException("deu ruim"))
+    fun decrease(oldValue: Int): Flow<Counter> {
+        return flow {
+            delay(2000)
+            val newValue = oldValue - 1
+            val counter = Counter(value = newValue)
+            _counter.emit(counter)
+            emit(counter)
+        }.flowOn(Dispatchers.IO)
     }
+
 }
