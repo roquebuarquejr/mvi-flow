@@ -1,40 +1,32 @@
 package com.roquebuarque.mvi.presentation
 
 import com.roquebuarque.mvi.data.*
+import com.roquebuarque.mvi.presentation.reducer.CounterAction
+import com.roquebuarque.mvi.presentation.reducer.CounterActionCreator
+import com.roquebuarque.mvi.presentation.reducer.CounterEvent
+import com.roquebuarque.mvi.presentation.reducer.CounterReducer
 import com.roquebuarque.mvi.redux.StateViewModel
 import kotlinx.coroutines.*
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-class CounterViewModel(scope: CoroutineScope) :
-    StateViewModel<CounterState, CounterEvent, CounterAction>(
-        scope = scope,
+class CounterViewModel(reducer: CounterReducer, actionCreator: CounterActionCreator)
+    : StateViewModel<CounterState, CounterEvent, CounterAction>(
         initialState = CounterState(
             counter = Counter(0),
             syncState = CounterSyncState.Content
         ),
         initialEvent = CounterEvent.InitialEvent,
-        reducer = CounterReducer,
-        action = CounterActionCreator.create()
-    )
+        reducer = reducer,
+        action = actionCreator
+    ) {
 
-
-sealed class CounterAction {
-
-    object Executing : CounterAction()
-
-    data class Success(val counter: Counter) : CounterAction()
-
-    data class Error(val msg: String) : CounterAction()
-}
-
-
-sealed class CounterEvent {
-
-    object InitialEvent : CounterEvent()
-
-    data class Increase(val value: Int) : CounterEvent()
-
-    data class Decrease(val value: Int) : CounterEvent()
-
+    companion object {
+        fun create(
+            reducer: CounterReducer = CounterReducer,
+            actionCreator: CounterActionCreator = CounterActionCreator.create()
+        ): CounterViewModel {
+            return CounterViewModel(reducer, actionCreator)
+        }
+    }
 }

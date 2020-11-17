@@ -1,4 +1,6 @@
-package com.roquebuarque.mvi.data
+package com.roquebuarque.mvi.presentation
+
+import com.roquebuarque.mvi.data.Counter
 
 data class CounterState(
     val counter: Counter,

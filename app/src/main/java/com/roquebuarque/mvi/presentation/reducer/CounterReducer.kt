@@ -1,9 +1,9 @@
-package com.roquebuarque.mvi.presentation
+package com.roquebuarque.mvi.presentation.reducer
 
 import android.annotation.SuppressLint
 import android.util.Log
-import com.roquebuarque.mvi.data.CounterState
-import com.roquebuarque.mvi.data.CounterSyncState
+import com.roquebuarque.mvi.presentation.CounterState
+import com.roquebuarque.mvi.presentation.CounterSyncState
 import com.roquebuarque.mvi.redux.Reducer
 
 object CounterReducer : Reducer<CounterState, CounterAction> {
@@ -15,18 +15,30 @@ object CounterReducer : Reducer<CounterState, CounterAction> {
         Log.d(TAG, "Action $action")
         Log.d(TAG, "State $oldState")
         return when (action) {
-            CounterAction.Executing -> {
+            CounterAction.Fetch -> {
                 assert(
-                            oldState.syncState is CounterSyncState.Content ||
+                    oldState.syncState is CounterSyncState.Content ||
                             oldState.syncState is CounterSyncState.Message
                 )
-                // assertValue(oldState.syncState, CounterSyncState.Idle)
                 oldState.copy(syncState = CounterSyncState.Loading)
 
             }
+            CounterAction.Increase -> {
+                assert(
+                    oldState.syncState is CounterSyncState.Content ||
+                            oldState.syncState is CounterSyncState.Message
+                )
+                oldState.copy(syncState = CounterSyncState.Loading)
+            }
+            CounterAction.Decrease -> {
+                assert(
+                    oldState.syncState is CounterSyncState.Content ||
+                            oldState.syncState is CounterSyncState.Message
+                )
+                oldState.copy(syncState = CounterSyncState.Loading)
+            }
             is CounterAction.Success -> {
                 assert(oldState.syncState == CounterSyncState.Loading)
-                //  assertValue(oldState.syncState, CounterSyncState.Success)
                 oldState.copy(
                     counter = action.counter,
                     syncState = CounterSyncState.Content
@@ -34,8 +46,11 @@ object CounterReducer : Reducer<CounterState, CounterAction> {
             }
             is CounterAction.Error -> {
                 assert(oldState.syncState is CounterSyncState.Loading)
-                //  assertValue(oldState.syncState, CounterSyncState.Error)
-                oldState.copy(syncState = CounterSyncState.Message(action.msg))
+                oldState.copy(
+                    syncState = CounterSyncState.Message(
+                        action.msg
+                    )
+                )
             }
         }
     }

@@ -1,14 +1,15 @@
-package com.roquebuarque.mvi
+package com.roquebuarque.mvi.presentation.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import com.roquebuarque.mvi.data.CounterState
-import com.roquebuarque.mvi.data.CounterSyncState
+import com.roquebuarque.mvi.R
+import com.roquebuarque.mvi.presentation.CounterState
+import com.roquebuarque.mvi.presentation.CounterSyncState
 import com.roquebuarque.mvi.utils.setOnClickListenerFlow
-import com.roquebuarque.mvi.presentation.CounterEvent
+import com.roquebuarque.mvi.presentation.reducer.CounterEvent
 import com.roquebuarque.mvi.presentation.CounterViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -20,13 +21,11 @@ import kotlinx.coroutines.launch
 @ExperimentalCoroutinesApi
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: CounterViewModel
+    private val viewModel = CounterViewModel.create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        viewModel = CounterViewModel(lifecycleScope)
 
         bindEvents()
         setupObserver()
@@ -47,8 +46,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupObserver() {
         lifecycleScope.launch {
-            viewModel.state
-                .collect { render(it) }
+            viewModel.state.collect { render(it) }
         }
     }
 
