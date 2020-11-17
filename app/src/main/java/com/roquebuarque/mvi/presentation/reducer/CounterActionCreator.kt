@@ -1,35 +1,36 @@
 package com.roquebuarque.mvi.presentation.reducer
 
+import android.util.Log
 import com.roquebuarque.mvi.data.CounterRepository
 import com.roquebuarque.mvi.redux.Action
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
+import javax.inject.Inject
 
 @FlowPreview
-class CounterActionCreator(
+class CounterActionCreator @Inject constructor(
     private val repository: CounterRepository
 ) : Action<CounterEvent, CounterAction> {
-
-    companion object {
-        fun create(repository: CounterRepository = CounterRepository): CounterActionCreator {
-            return CounterActionCreator(
-                repository
-            )
-        }
-    }
 
     override fun invoke(event: CounterEvent): Flow<CounterAction> {
         return when (event) {
             CounterEvent.InitialEvent -> initial()
             is CounterEvent.Increase -> increase(event.value)
             is CounterEvent.Decrease -> decrease(event.value)
+            is CounterEvent.Analytics -> analytics(event.str)
+        }
+    }
+
+    private fun analytics(str: String): Flow<CounterAction> {
+       return flow {
+            emit(CounterAction.SideEffect(str))
         }
     }
 
     private fun initial(): Flow<CounterAction> {
         return repository.counter
             .map { CounterAction.Success(it) as CounterAction }
-            .onStart { emit(CounterAction.Fetch) }
+           .onStart { emit(CounterAction.Fetch) }
     }
 
     private fun increase(oldValue: Int): Flow<CounterAction> {

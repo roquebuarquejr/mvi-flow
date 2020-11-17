@@ -4,9 +4,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @FlowPreview
-object CounterRepository {
+@Singleton
+class CounterRepository @Inject constructor() {
 
     private val _counter = MutableStateFlow(Counter(value = 0))
     val counter: Flow<Counter> = _counter
@@ -18,8 +21,7 @@ object CounterRepository {
             val counter = Counter(value = newValue)
             _counter.emit(counter)
             emit(counter)
-        }
-            .flowOn(Dispatchers.IO)
+        }.flowOn(Dispatchers.IO)
     }
 
     fun decrease(oldValue: Int): Flow<Counter> {

@@ -1,5 +1,6 @@
 package com.roquebuarque.mvi.redux
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
@@ -15,18 +16,22 @@ abstract class StateViewModel<State, Event, Action>(
 
     private val event = MutableStateFlow(initialEvent)
     val state: StateFlow<State> = toState(viewModelScope)
-    private var stateCache = state.value
 
     suspend fun process(event: Flow<Event>) {
-        event.collect { this.event.emit(it) }
+        event.collect {
+            this.event.emit(it)
+        }
     }
 
     private fun toState(scope: CoroutineScope): StateFlow<State> {
         return event
             .flatMapLatest { action.invoke(it) }
-            .map { reducer.invoke(stateCache, it) }
-            .onEach { stateCache = it }
+            .map { reducer.invoke(state.value, it) }
+            .distinctUntilChanged()
+            .onCompletion { Log.d(StateViewModel::class.java.name, "onCompletion for $state") }
             .stateIn(scope, SharingStarted.Lazily, initialState)
+
     }
+
 }
 

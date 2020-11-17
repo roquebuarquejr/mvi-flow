@@ -42,6 +42,20 @@
         app:layout_constraintTop_toBottomOf="@id/txtCounter"
         app:layout_constraintRight_toRightOf="parent"/>
 
+    <Button
+        android:id="@+id/btnSideEffect"
+        android:layout_width="match_parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_height="wrap_content"
+        android:text="@string/increase"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnDecrease" />
+
     <ProgressBar
         android:visibility="gone"
         android:id="@+id/progressBar"
@@ -51,5 +65,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

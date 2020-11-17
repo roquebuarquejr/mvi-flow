@@ -3,6 +3,7 @@ package com.roquebuarque.mvi.presentation.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.roquebuarque.mvi.R
@@ -11,6 +12,7 @@ import com.roquebuarque.mvi.presentation.CounterSyncState
 import com.roquebuarque.mvi.utils.setOnClickListenerFlow
 import com.roquebuarque.mvi.presentation.reducer.CounterEvent
 import com.roquebuarque.mvi.presentation.CounterViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -19,9 +21,10 @@ import kotlinx.coroutines.launch
 
 @FlowPreview
 @ExperimentalCoroutinesApi
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private val viewModel = CounterViewModel.create()
+    private val viewModel: CounterViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,14 +32,21 @@ class MainActivity : AppCompatActivity() {
 
         bindEvents()
         setupObserver()
+
     }
 
     private fun bindEvents() {
         lifecycleScope.launch {
             viewModel.process(
                 merge(
+                    btnSideEffect.setOnClickListenerFlow()
+                        .map { CounterEvent.Analytics("dsadasd") },
                     btnDecrease.setOnClickListenerFlow()
-                        .map { CounterEvent.Decrease(txtCounter.text.toString().toInt()) },
+                        .map {
+                            CounterEvent.Decrease(
+                                txtCounter.text.toString().toInt()
+                            ) as CounterEvent
+                        },
                     btnIncrease.setOnClickListenerFlow()
                         .map { CounterEvent.Increase(txtCounter.text.toString().toInt()) }
                 )

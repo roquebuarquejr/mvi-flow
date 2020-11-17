@@ -5,15 +5,18 @@ import android.util.Log
 import com.roquebuarque.mvi.presentation.CounterState
 import com.roquebuarque.mvi.presentation.CounterSyncState
 import com.roquebuarque.mvi.redux.Reducer
+import javax.inject.Inject
 
-object CounterReducer : Reducer<CounterState, CounterAction> {
+class CounterReducer @Inject constructor() : Reducer<CounterState, CounterAction> {
 
-    private val TAG = CounterReducer::class.java.name
+    companion object{
+        private val TAG = CounterReducer::class.java.name
+    }
 
     @SuppressLint("Assert")
     override fun invoke(oldState: CounterState, action: CounterAction): CounterState {
         Log.d(TAG, "Action $action")
-        Log.d(TAG, "State $oldState")
+        Log.d(TAG, "Old State $oldState")
         return when (action) {
             CounterAction.Fetch -> {
                 assert(
@@ -52,6 +55,9 @@ object CounterReducer : Reducer<CounterState, CounterAction> {
                     )
                 )
             }
+            is CounterAction.SideEffect -> oldState
+        }.also {
+            Log.d(TAG, "New State $it")
         }
     }
 }
