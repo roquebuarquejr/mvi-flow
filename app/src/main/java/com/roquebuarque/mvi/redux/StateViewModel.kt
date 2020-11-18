@@ -27,7 +27,6 @@ abstract class StateViewModel<State, Event, Action>(
         return event
             .flatMapLatest { action.invoke(it) }
             .map { reducer.invoke(state.value, it) }
-            .distinctUntilChanged()
             .onCompletion { Log.d(StateViewModel::class.java.name, "onCompletion for $state") }
             .stateIn(scope, SharingStarted.Lazily, initialState)
 

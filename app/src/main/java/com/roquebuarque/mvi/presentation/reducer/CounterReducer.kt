@@ -15,8 +15,8 @@ class CounterReducer @Inject constructor() : Reducer<CounterState, CounterAction
 
     @SuppressLint("Assert")
     override fun invoke(oldState: CounterState, action: CounterAction): CounterState {
-        Log.d(TAG, "Action $action")
         Log.d(TAG, "Old State $oldState")
+        Log.d(TAG, "Action $action")
         return when (action) {
             CounterAction.Fetch -> {
                 assert(

@@ -23,8 +23,9 @@ class CounterActionCreator @Inject constructor(
 
     private fun analytics(str: String): Flow<CounterAction> {
        return flow {
+           Log.d("Roque", "Roque")
             emit(CounterAction.SideEffect(str))
-        }
+        }.drop(1)
     }
 
     private fun initial(): Flow<CounterAction> {
