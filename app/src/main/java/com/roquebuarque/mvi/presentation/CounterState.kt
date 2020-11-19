@@ -12,3 +12,4 @@ sealed class CounterSyncState {
     object Content : CounterSyncState()
     data class Message(val msg: String) : CounterSyncState()
 }
+

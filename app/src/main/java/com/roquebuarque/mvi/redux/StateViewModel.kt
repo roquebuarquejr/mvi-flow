@@ -10,11 +10,12 @@ import kotlinx.coroutines.flow.*
 @ExperimentalCoroutinesApi
 abstract class StateViewModel<State, Event, Action>(
     initialEvent: Event,
-    private val initialState: State, private val reducer: (State, Action) -> State,
+    private val initialState: State,
+    private val reducer: (State, Action) -> State,
     private val action: (Event) -> Flow<Action>
 ) : ViewModel() {
 
-    companion object{
+    companion object {
         private val TAG = StateViewModel::class.java.name
     }
 

@@ -3,7 +3,7 @@ package com.roquebuarque.mvi.presentation.reducer
 import com.roquebuarque.mvi.presentation.CounterState
 import com.roquebuarque.mvi.presentation.CounterSyncState
 import com.roquebuarque.mvi.redux.Reducer
-import com.roquebuarque.mvi.utils.assertValue
+import com.roquebuarque.mvi.utils.guard
 import javax.inject.Inject
 
 class CounterReducer @Inject constructor() : Reducer<CounterState, CounterAction> {
@@ -16,17 +16,18 @@ class CounterReducer @Inject constructor() : Reducer<CounterState, CounterAction
                     currentState.syncState is CounterSyncState.Content ||
                             currentState.syncState is CounterSyncState.Message
 
-                isContentOrMessage.assertValue(
+                isContentOrMessage.guard(
                     state = currentState,
                     action = action
                 )
 
                 currentState.copy(syncState = CounterSyncState.Loading)
             }
+
             is CounterAction.Success -> {
 
                 val isLoading = currentState.syncState == CounterSyncState.Loading
-                isLoading.assertValue(
+                isLoading.guard(
                     state = currentState,
                     action = action
                 )
@@ -39,7 +40,7 @@ class CounterReducer @Inject constructor() : Reducer<CounterState, CounterAction
             is CounterAction.Error -> {
                 val isLoading = currentState.syncState == CounterSyncState.Loading
 
-                isLoading.assertValue(
+                isLoading.guard(
                     state = currentState,
                     action = action
                 )

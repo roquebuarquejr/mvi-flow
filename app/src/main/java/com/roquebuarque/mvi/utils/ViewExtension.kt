@@ -4,7 +4,9 @@ import android.view.View
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.catch
 
 
 @FlowPreview
@@ -17,4 +19,7 @@ fun View.setOnClickListenerFlow() = callbackFlow {
     }
 }
 
+fun <T> Flow<T>.handleErrors(): Flow<T> =
+    catch { e -> e.printStackTrace() }
+        //.also { block(this) }
 

@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import com.roquebuarque.mvi.R
 import com.roquebuarque.mvi.presentation.CounterState
@@ -12,6 +14,7 @@ import com.roquebuarque.mvi.presentation.CounterSyncState
 import com.roquebuarque.mvi.utils.setOnClickListenerFlow
 import com.roquebuarque.mvi.presentation.reducer.CounterEvent
 import com.roquebuarque.mvi.presentation.CounterViewModel
+import com.roquebuarque.mvi.utils.handleErrors
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -53,22 +56,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupObserver() {
-        lifecycleScope.launch {
-            viewModel.state.collect { render(it) }
-        }
+        viewModel.state.asLiveData().observe(this, Observer {
+            render(it)
+        })
     }
 
     private fun render(state: CounterState) {
-        Log.d(MainActivity::class.java.name, state.toString())
         when (state.syncState) {
             CounterSyncState.Loading -> progressBar.isVisible = true
             CounterSyncState.Content -> {
                 progressBar.isVisible = false
+                txtErrorMessage.isVisible = false
                 txtCounter.text = state.counter.value.toString()
             }
             is CounterSyncState.Message -> {
                 progressBar.isVisible = false
-                txtCounter.text = state.syncState.msg
+                txtErrorMessage.isVisible = true
+                txtErrorMessage.text = state.syncState.msg
             }
         }
     }

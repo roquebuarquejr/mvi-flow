@@ -19,7 +19,6 @@ class CounterActionCreator @Inject constructor(
         }
     }
 
-
     private fun initial(): Flow<CounterAction> {
         return repository.counter
             .map { CounterAction.Success(it) as CounterAction }
