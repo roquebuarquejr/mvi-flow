@@ -4,13 +4,7 @@ import com.roquebuarque.mvi.data.Counter
 
 sealed class CounterAction {
 
-    data class SideEffect(val sg : String) : CounterAction()
-
-    object Fetch : CounterAction()
-
-    object Increase : CounterAction()
-
-    object Decrease : CounterAction()
+    object Executing : CounterAction()
 
     data class Success(val counter: Counter) : CounterAction()
 

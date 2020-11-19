@@ -39,8 +39,6 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             viewModel.process(
                 merge(
-                    btnSideEffect.setOnClickListenerFlow()
-                        .map { CounterEvent.Analytics("dsadasd") },
                     btnDecrease.setOnClickListenerFlow()
                         .map {
                             CounterEvent.Decrease(

@@ -14,48 +14,32 @@ class CounterReducer @Inject constructor() : Reducer<CounterState, CounterAction
     }
 
     @SuppressLint("Assert")
-    override fun invoke(oldState: CounterState, action: CounterAction): CounterState {
-        Log.d(TAG, "Old State $oldState")
+    override fun invoke(currentState: CounterState, action: CounterAction): CounterState {
+        Log.d(TAG, "Current State $currentState")
         Log.d(TAG, "Action $action")
         return when (action) {
-            CounterAction.Fetch -> {
+            CounterAction.Executing -> {
                 assert(
-                    oldState.syncState is CounterSyncState.Content ||
-                            oldState.syncState is CounterSyncState.Message
+                    currentState.syncState is CounterSyncState.Content ||
+                            currentState.syncState is CounterSyncState.Message
                 )
-                oldState.copy(syncState = CounterSyncState.Loading)
-
-            }
-            CounterAction.Increase -> {
-                assert(
-                    oldState.syncState is CounterSyncState.Content ||
-                            oldState.syncState is CounterSyncState.Message
-                )
-                oldState.copy(syncState = CounterSyncState.Loading)
-            }
-            CounterAction.Decrease -> {
-                assert(
-                    oldState.syncState is CounterSyncState.Content ||
-                            oldState.syncState is CounterSyncState.Message
-                )
-                oldState.copy(syncState = CounterSyncState.Loading)
+                currentState.copy(syncState = CounterSyncState.Loading)
             }
             is CounterAction.Success -> {
-                assert(oldState.syncState == CounterSyncState.Loading)
-                oldState.copy(
+                assert(currentState.syncState == CounterSyncState.Loading)
+                currentState.copy(
                     counter = action.counter,
                     syncState = CounterSyncState.Content
                 )
             }
             is CounterAction.Error -> {
-                assert(oldState.syncState is CounterSyncState.Loading)
-                oldState.copy(
+                assert(currentState.syncState is CounterSyncState.Loading)
+                currentState.copy(
                     syncState = CounterSyncState.Message(
                         action.msg
                     )
                 )
             }
-            is CounterAction.SideEffect -> oldState
         }.also {
             Log.d(TAG, "New State $it")
         }
