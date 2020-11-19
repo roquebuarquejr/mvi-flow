@@ -14,6 +14,10 @@ abstract class StateViewModel<State, Event, Action>(
     private val action: (Event) -> Flow<Action>
 ) : ViewModel() {
 
+    companion object{
+        private val TAG = StateViewModel::class.java.name
+    }
+
     private val event = MutableStateFlow(initialEvent)
     val state: StateFlow<State> = toState(viewModelScope)
 
@@ -25,11 +29,13 @@ abstract class StateViewModel<State, Event, Action>(
 
     private fun toState(scope: CoroutineScope): StateFlow<State> {
         return event
+            .onEach { Log.d(TAG, "Event $it") }
             .flatMapLatest { action.invoke(it) }
+            .onEach { Log.d(TAG, "Action $it") }
             .map { reducer.invoke(state.value, it) }
+            .onEach { Log.d(TAG, "State $it") }
             .onCompletion { Log.d(StateViewModel::class.java.name, "onCompletion for $state") }
             .stateIn(scope, SharingStarted.Lazily, initialState)
-
     }
 
 }
