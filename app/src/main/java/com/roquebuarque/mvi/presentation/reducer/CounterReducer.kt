@@ -11,7 +11,6 @@ class CounterReducer @Inject constructor() : Reducer<CounterState, CounterAction
     override fun invoke(currentState: CounterState, action: CounterAction): CounterState {
         return when (action) {
             CounterAction.Executing -> {
-
                 val isContentOrMessage =
                     currentState.syncState is CounterSyncState.Content ||
                             currentState.syncState is CounterSyncState.Message
@@ -20,18 +19,15 @@ class CounterReducer @Inject constructor() : Reducer<CounterState, CounterAction
                     state = currentState,
                     action = action
                 )
-
                 currentState.copy(syncState = CounterSyncState.Loading)
             }
 
             is CounterAction.Success -> {
-
                 val isLoading = currentState.syncState == CounterSyncState.Loading
                 isLoading.guard(
                     state = currentState,
                     action = action
                 )
-
                 currentState.copy(
                     counter = action.counter,
                     syncState = CounterSyncState.Content
@@ -39,12 +35,10 @@ class CounterReducer @Inject constructor() : Reducer<CounterState, CounterAction
             }
             is CounterAction.Error -> {
                 val isLoading = currentState.syncState == CounterSyncState.Loading
-
                 isLoading.guard(
                     state = currentState,
                     action = action
                 )
-                
                 currentState.copy(
                     syncState = CounterSyncState.Message(
                         action.msg
