@@ -1,47 +1,55 @@
 package com.roquebuarque.mvi.presentation.reducer
 
-import android.annotation.SuppressLint
-import android.util.Log
 import com.roquebuarque.mvi.presentation.CounterState
 import com.roquebuarque.mvi.presentation.CounterSyncState
 import com.roquebuarque.mvi.redux.Reducer
+import com.roquebuarque.mvi.utils.assertValue
 import javax.inject.Inject
 
 class CounterReducer @Inject constructor() : Reducer<CounterState, CounterAction> {
 
-    companion object{
-        private val TAG = CounterReducer::class.java.name
-    }
-
-    @SuppressLint("Assert")
     override fun invoke(currentState: CounterState, action: CounterAction): CounterState {
-        Log.d(TAG, "Current State $currentState")
-        Log.d(TAG, "Action $action")
         return when (action) {
             CounterAction.Executing -> {
-                assert(
+
+                val isContentOrMessage =
                     currentState.syncState is CounterSyncState.Content ||
                             currentState.syncState is CounterSyncState.Message
+
+                isContentOrMessage.assertValue(
+                    state = currentState,
+                    action = action
                 )
+
                 currentState.copy(syncState = CounterSyncState.Loading)
             }
             is CounterAction.Success -> {
-                assert(currentState.syncState == CounterSyncState.Loading)
+
+                val isLoading = currentState.syncState == CounterSyncState.Loading
+                isLoading.assertValue(
+                    state = currentState,
+                    action = action
+                )
+
                 currentState.copy(
                     counter = action.counter,
                     syncState = CounterSyncState.Content
                 )
             }
             is CounterAction.Error -> {
-                assert(currentState.syncState is CounterSyncState.Loading)
+                val isLoading = currentState.syncState == CounterSyncState.Loading
+
+                isLoading.assertValue(
+                    state = currentState,
+                    action = action
+                )
+                
                 currentState.copy(
                     syncState = CounterSyncState.Message(
                         action.msg
                     )
                 )
             }
-        }.also {
-            Log.d(TAG, "New State $it")
         }
     }
 }
