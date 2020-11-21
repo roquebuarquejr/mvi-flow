@@ -15,16 +15,11 @@ class CounterActionCreator @Inject constructor(
 
     override fun invoke(event: CounterEvent): Flow<CounterAction> {
         return flow {
-            runCatching {
-                when (event) {
-                    is CounterEvent.Increase -> increase()
-                    is CounterEvent.Decrease -> decrease()
-                }.run {
-                    emit(CounterAction.Success(this))
-                }
-
-            }.onFailure {
-                emit(CounterAction.Error("deu ruim"))
+            when (event) {
+                is CounterEvent.Increase -> increase()
+                is CounterEvent.Decrease -> TODO()//decrease()
+            }.run {
+                emit(CounterAction.Success(this) as CounterAction)
             }
         }
             .buffer(0)
