@@ -43,13 +43,9 @@ class MainActivity : AppCompatActivity() {
             viewModel.process(
                 merge(
                     btnDecrease.setOnClickListenerFlow()
-                        .map {
-                            CounterEvent.Decrease(
-                                txtCounter.text.toString().toInt()
-                            ) as CounterEvent
-                        },
+                        .map { CounterEvent.Decrease },
                     btnIncrease.setOnClickListenerFlow()
-                        .map { CounterEvent.Increase(txtCounter.text.toString().toInt()) }
+                        .map { CounterEvent.Increase }
                 )
             )
         }

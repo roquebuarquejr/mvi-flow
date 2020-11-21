@@ -20,7 +20,6 @@ class CounterViewModel @ViewModelInject constructor(
         counter = Counter(0),
         syncState = CounterSyncState.Content
     ),
-    initialEvent = CounterEvent.InitialEvent,
     reducer = reducer,
     action = actionCreator
 )

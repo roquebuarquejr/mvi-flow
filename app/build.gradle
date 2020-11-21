@@ -92,4 +92,8 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_android_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_android_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_android_version"
+
+    implementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
+    testImplementation "junit:junit:4.13.1"
+    testImplementation "org.mockito:mockito-inline:3.3.3"
 }
