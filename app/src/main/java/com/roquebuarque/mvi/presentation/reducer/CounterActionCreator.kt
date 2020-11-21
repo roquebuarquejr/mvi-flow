@@ -17,7 +17,7 @@ class CounterActionCreator @Inject constructor(
         return flow {
             when (event) {
                 is CounterEvent.Increase -> increase()
-                is CounterEvent.Decrease -> TODO()//decrease()
+                is CounterEvent.Decrease -> decrease()
             }.run {
                 emit(CounterAction.Success(this) as CounterAction)
             }
