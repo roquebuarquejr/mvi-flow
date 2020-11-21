@@ -35,11 +35,13 @@ class CounterActionCreator @Inject constructor(
 
     private suspend fun increase(): Counter {
         val result = repository.increase()
-        delay(8000)
+        delay(2000)
         return result
     }
 
     private suspend fun decrease(): Counter {
-        return repository.decrease()
+        val result = repository.decrease()
+        delay(2000)
+        return result
     }
 }
