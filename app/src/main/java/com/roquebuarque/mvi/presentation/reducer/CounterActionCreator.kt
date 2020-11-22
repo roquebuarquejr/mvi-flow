@@ -22,7 +22,6 @@ class CounterActionCreator @Inject constructor(
                 emit(CounterAction.Success(this) as CounterAction)
             }
         }
-            .buffer(0)
             .onStart { emit(CounterAction.Executing) }
             .catch { emit(CounterAction.Error("erro inesperado")) }
             .flowOn(Dispatchers.IO)
@@ -35,8 +34,6 @@ class CounterActionCreator @Inject constructor(
     }
 
     private suspend fun decrease(): Counter {
-        val result = repository.decrease()
-        delay(2000)
-        return result
+        return repository.decrease()
     }
 }

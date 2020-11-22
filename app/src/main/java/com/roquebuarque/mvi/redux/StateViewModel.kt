@@ -26,7 +26,7 @@ abstract class StateViewModel<State, Event, Action>(
 
     suspend fun process(event: Flow<Event>) {
         event.collect {
-            this.event.send(it)
+            this.event.send(it)//suspend
         }
     }
 

@@ -8,6 +8,7 @@ import com.roquebuarque.mvi.presentation.reducer.CounterEvent
 import com.roquebuarque.mvi.presentation.reducer.CounterReducer
 import com.roquebuarque.mvi.redux.StateViewModel
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 @FlowPreview
@@ -23,4 +24,3 @@ class CounterViewModel @ViewModelInject constructor(
     reducer = reducer,
     action = actionCreator
 )
-
