@@ -34,7 +34,7 @@ abstract class StateViewModel<State, Event, Action>(
         return event
             .receiveAsFlow()
             .onEach { Log.d(TAG, "Event $it") }
-            .flatMapLatest { action.invoke(it) }
+            .flatMapConcat { action.invoke(it) }
             .distinctUntilChanged()
             .onEach { Log.d(TAG, "Action $it") }
             .map { reducer.invoke(state.value, it) }

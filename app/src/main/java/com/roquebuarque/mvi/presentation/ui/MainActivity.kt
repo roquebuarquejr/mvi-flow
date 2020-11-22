@@ -59,7 +59,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun render(state: CounterState) {
         when (state.syncState) {
-            CounterSyncState.Loading -> progressBar.isVisible = true
+            CounterSyncState.Loading -> {
+                progressBar.isVisible = true
+            }
             CounterSyncState.Content -> {
                 progressBar.isVisible = false
                 txtErrorMessage.isVisible = false

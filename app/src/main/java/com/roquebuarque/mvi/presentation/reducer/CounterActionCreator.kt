@@ -29,7 +29,7 @@ class CounterActionCreator @Inject constructor(
 
     private suspend fun increase(): Counter {
         val result = repository.increase()
-        delay(2000)
+        delay(10000)
         return result
     }
 
