@@ -58,6 +58,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun render(state: CounterState) {
+        Log.d(MainActivity::class.java.name, "Render State $state")
+        txtCounter.text = state.counter.value.toString()
+
         when (state.syncState) {
             CounterSyncState.Loading -> {
                 progressBar.isVisible = true
@@ -65,7 +68,6 @@ class MainActivity : AppCompatActivity() {
             CounterSyncState.Content -> {
                 progressBar.isVisible = false
                 txtErrorMessage.isVisible = false
-                txtCounter.text = state.counter.value.toString()
             }
             is CounterSyncState.Message -> {
                 progressBar.isVisible = false
