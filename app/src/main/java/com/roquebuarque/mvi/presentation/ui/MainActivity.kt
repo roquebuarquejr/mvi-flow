@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupObserver() {
-        viewModel.state.asLiveData().observe(this, Observer {
+        viewModel.state.asLiveData().observe(this, {
             render(it)
         })
     }
