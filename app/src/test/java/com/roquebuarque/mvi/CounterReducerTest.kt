@@ -1,6 +1,5 @@
 package com.roquebuarque.mvi
 
-import com.nhaarman.mockitokotlin2.given
 import com.roquebuarque.mvi.data.Counter
 import com.roquebuarque.mvi.presentation.CounterState
 import com.roquebuarque.mvi.presentation.CounterSyncState
@@ -12,7 +11,7 @@ import org.junit.Test
 class CounterReducerTest {
 
     @Test
-    fun test_loading(){
+    fun test_loading() {
         //Given
         val action = CounterAction.Executing
         val currentState = CounterState(Counter(1), CounterSyncState.Content)
@@ -25,7 +24,26 @@ class CounterReducerTest {
     }
 
     @Test
-    fun test_content(){
+    fun test_loading_error() {
+        //Given
+        val action = CounterAction.Executing
+        val currentState = CounterState(Counter(1), CounterSyncState.Loading)
+        var isOnError = false
+
+        //When
+        try {
+             CounterReducer().invoke(currentState, action)
+        } catch (e: IllegalStateException) {
+            isOnError = true
+        }
+
+        //Then
+        assertTrue(isOnError)
+    }
+
+    @ExperimentalStdlibApi
+    @Test
+    fun test_content() {
         //Given
         val action = CounterAction.Success(Counter(2))
         val currentState = CounterState(Counter(1), CounterSyncState.Loading)
@@ -39,7 +57,7 @@ class CounterReducerTest {
     }
 
     @Test
-    fun test_message(){
+    fun test_message() {
         //Given
         val action = CounterAction.Error("deu ruim")
         val currentState = CounterState(Counter(1), CounterSyncState.Loading)

@@ -14,7 +14,6 @@ import com.roquebuarque.mvi.presentation.CounterSyncState
 import com.roquebuarque.mvi.utils.setOnClickListenerFlow
 import com.roquebuarque.mvi.presentation.reducer.CounterEvent
 import com.roquebuarque.mvi.presentation.CounterViewModel
-import com.roquebuarque.mvi.utils.handleErrors
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi

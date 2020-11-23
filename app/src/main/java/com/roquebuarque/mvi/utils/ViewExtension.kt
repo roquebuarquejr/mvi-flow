@@ -18,8 +18,3 @@ fun View.setOnClickListenerFlow() = callbackFlow {
         setOnClickListener(null)
     }
 }
-
-fun <T> Flow<T>.handleErrors(): Flow<T> =
-    catch { e -> e.printStackTrace() }
-        //.also { block(this) }
-

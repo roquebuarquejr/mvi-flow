@@ -21,8 +21,8 @@ abstract class StateViewModel<State, Event, Action>(
         private val TAG = StateViewModel::class.java.name
     }
 
-    private val event = Channel<Event>()
-    val state: StateFlow<State> = toState(viewModelScope)
+    private val event = Channel<Event>()//Event flow is coming!
+    val state: StateFlow<State> = toState()
 
     suspend fun process(event: Flow<Event>) {
         event.collect {
@@ -30,18 +30,17 @@ abstract class StateViewModel<State, Event, Action>(
         }
     }
 
-    private fun toState(scope: CoroutineScope): StateFlow<State> {
+    private fun toState(): StateFlow<State> {
         return event
             .receiveAsFlow()
             .onEach { Log.d(TAG, "Event $it") }
-            .flatMapConcat { action.invoke(it) }
+            .flatMapConcat { event-> action(event) }
             .distinctUntilChanged()
             .onEach { Log.d(TAG, "Action $it") }
-            .map { reducer.invoke(state.value, it) }
+            .map {action-> reducer(state.value, action) }
             .onEach { Log.d(TAG, "State $it") }
             .onCompletion { Log.d(StateViewModel::class.java.name, "onCompletion for $state") }
-            .stateIn(scope, SharingStarted.Lazily, initialState)
+            .stateIn(viewModelScope, SharingStarted.Lazily, initialState)
     }
-
 }
 

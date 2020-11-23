@@ -15,12 +15,11 @@ class CounterActionCreator @Inject constructor(
 
     override fun invoke(event: CounterEvent): Flow<CounterAction> {
         return flow {
-            when (event) {
+            val result = when (event) {
                 is CounterEvent.Increase -> increase()
                 is CounterEvent.Decrease -> decrease()
-            }.run {
-                emit(CounterAction.Success(this) as CounterAction)
             }
+            emit(CounterAction.Success(result) as CounterAction)
         }
             .onStart { emit(CounterAction.Executing) }
             .catch { emit(CounterAction.Error("erro inesperado")) }
@@ -34,6 +33,7 @@ class CounterActionCreator @Inject constructor(
     }
 
     private suspend fun decrease(): Counter {
+        delay(4000)
         return repository.decrease()
     }
 }
