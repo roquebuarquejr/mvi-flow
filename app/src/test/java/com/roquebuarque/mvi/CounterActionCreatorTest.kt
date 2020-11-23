@@ -1,5 +1,6 @@
 package com.roquebuarque.mvi
 
+import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import com.roquebuarque.mvi.data.Counter
@@ -32,6 +33,7 @@ class CounterActionCreatorTest {
         runBlocking {
             //Given
             val event = CounterEvent.Increase
+            repository.increase() willReturn Counter(1)
             whenever(repository.increase()).thenReturn(Counter(1))
 
             //When
@@ -57,7 +59,12 @@ class CounterActionCreatorTest {
             //Then
             assertTrue(result.count() == 2)
             assertTrue(result.take(2).toList().contains(CounterAction.Executing))
-            assertTrue(result.take(2).toList().contains(CounterAction.Error("deu ruim")))
+            assertTrue(result.take(2).toList().contains(CounterAction.Error("erro inesperado")))
         }
     }
+}
+
+infix fun <T> T.willReturn(value: T) {
+    given(this)
+        .willReturn(value)
 }

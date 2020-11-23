@@ -1,5 +1,6 @@
 package com.roquebuarque.mvi
 
+import com.nhaarman.mockitokotlin2.given
 import com.roquebuarque.mvi.data.Counter
 import com.roquebuarque.mvi.presentation.CounterState
 import com.roquebuarque.mvi.presentation.CounterSyncState
