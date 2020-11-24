@@ -21,18 +21,17 @@ abstract class StateViewModel<State, Event, Action>(
         private val TAG = StateViewModel::class.java.name
     }
 
-    private val event = Channel<Event>()
+    private val event = MutableSharedFlow<Event>()//Could be just channel
     val state: StateFlow<State> = toState()
 
     suspend fun process(event: Flow<Event>) {
         event.collect {
-            this.event.send(it)//suspend
+            this.event.emit(it)//suspend
         }
     }
 
     private fun toState(): StateFlow<State> {
         return event
-            .receiveAsFlow()
             .onEach { Log.d(TAG, "Event $it") }
             .flatMapConcat { event-> action(event) }
             .distinctUntilChanged()
