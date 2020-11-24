@@ -16,7 +16,7 @@ sealed class CounterSyncState {
 /*
 @startuml
    @startuml
-    [*] --> LOADING :INCREASE/DECREASE
+    [*] --> LOADING :EXECUTING
    LOADING --> CONTENT : SUCCESS
    CONTENT : counter:Counter
    LOADING --> MESSAGE : ERROR
