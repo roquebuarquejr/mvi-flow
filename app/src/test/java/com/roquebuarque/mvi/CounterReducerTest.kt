@@ -24,7 +24,7 @@ class CounterReducerTest {
     }
 
     @Test
-    fun test_loading_error() {
+    fun test_loading_guard_error() {
         //Given
         val action = CounterAction.Executing
         val currentState = CounterState(Counter(1), CounterSyncState.Loading)
@@ -57,6 +57,25 @@ class CounterReducerTest {
     }
 
     @Test
+    fun test_content_guard_error() {
+        //Given
+            val action = CounterAction.Success(Counter(1))
+        val currentState = CounterState(Counter(0), CounterSyncState.Message("deu ruim"))
+        var isOnError = false
+
+        //When
+        try {
+            CounterReducer().invoke(currentState, action)
+        } catch (e: IllegalStateException) {
+            isOnError = true
+        }
+
+        //Then
+        assertTrue(isOnError)
+    }
+
+
+    @Test
     fun test_message() {
         //Given
         val action = CounterAction.Error("deu ruim")
@@ -68,5 +87,23 @@ class CounterReducerTest {
         //Then
         assertTrue(newState.counter.value == 1)
         assertTrue(newState.syncState == CounterSyncState.Message("deu ruim"))
+    }
+
+    @Test
+    fun test_message_guard_error() {
+        //Given
+        val action = CounterAction.Error("deu ruim")
+        val currentState = CounterState(Counter(0), CounterSyncState.Content)
+        var isOnError = false
+
+        //When
+        try {
+            CounterReducer().invoke(currentState, action)
+        } catch (e: IllegalStateException) {
+            isOnError = true
+        }
+
+        //Then
+        assertTrue(isOnError)
     }
 }

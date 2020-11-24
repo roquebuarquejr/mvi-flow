@@ -21,7 +21,7 @@ abstract class StateViewModel<State, Event, Action>(
         private val TAG = StateViewModel::class.java.name
     }
 
-    private val event = Channel<Event>()//Event flow is coming!
+    private val event = Channel<Event>()
     val state: StateFlow<State> = toState()
 
     suspend fun process(event: Flow<Event>) {
