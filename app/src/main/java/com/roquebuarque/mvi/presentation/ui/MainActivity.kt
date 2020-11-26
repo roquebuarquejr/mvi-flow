@@ -41,8 +41,6 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             viewModel.process(
                 merge(
-                    btnReset.setOnClickListenerFlow()
-                        .map { CounterEvent.Reset },
                     btnDecrease.setOnClickListenerFlow()
                         .map { CounterEvent.Decrease },
                     btnIncrease.setOnClickListenerFlow()
