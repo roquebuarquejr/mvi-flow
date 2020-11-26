@@ -32,7 +32,7 @@ class CounterReducerTest {
 
         //When
         try {
-             CounterReducer().invoke(currentState, action)
+            CounterReducer().invoke(currentState, action)
         } catch (e: IllegalStateException) {
             isOnError = true
         }
@@ -59,7 +59,7 @@ class CounterReducerTest {
     @Test
     fun test_content_guard_error() {
         //Given
-            val action = CounterAction.Success(Counter(1))
+        val action = CounterAction.Success(Counter(1))
         val currentState = CounterState(Counter(0), CounterSyncState.Message("deu ruim"))
         var isOnError = false
 
