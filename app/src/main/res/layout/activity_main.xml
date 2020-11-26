@@ -42,6 +42,17 @@
         app:layout_constraintTop_toBottomOf="@id/txtCounter"
         app:layout_constraintRight_toRightOf="parent"/>
 
+    <Button
+        android:id="@+id/btnReset"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Reset"
+        android:textAlignment="center"
+        android:layout_margin="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnDecrease" />
+
     <TextView
         android:id="@+id/txtErrorMessage"
         android:layout_width="match_parent"
@@ -54,7 +65,7 @@
         android:layout_margin="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnDecrease" />
+        app:layout_constraintTop_toBottomOf="@+id/btnReset" />
 
     <ProgressBar
         android:visibility="gone"

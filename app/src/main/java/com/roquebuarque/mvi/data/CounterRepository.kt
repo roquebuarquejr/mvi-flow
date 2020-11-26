@@ -23,4 +23,9 @@ class CounterRepository @Inject constructor() {
         return _counter.value
     }
 
+    suspend fun reset(): Counter {
+        _counter.emit(Counter(value = 0))
+        return _counter.value
+    }
+
 }
