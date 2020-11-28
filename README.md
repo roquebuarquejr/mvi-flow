@@ -15,6 +15,9 @@ No projeto voce encontrara as seguintes funcionalidades.
 * Mockito
 * JUnit
 
+## Slides
+https://www.slideshare.net/RoqueBuarqueJunior/entendento-arquitetura-mvi-flow
+
 ## Mais
 Para saber mais sobre o assunto, participe do meetup online.
 https://www.meetup.com/androiddevbr/events/274537657/
