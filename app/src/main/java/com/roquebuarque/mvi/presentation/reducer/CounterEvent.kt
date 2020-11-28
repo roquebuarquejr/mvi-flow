@@ -6,4 +6,6 @@ sealed class CounterEvent {
 
     object Decrease : CounterEvent()
 
+    object Reset : CounterEvent()
+
 }

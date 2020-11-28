@@ -41,6 +41,8 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             viewModel.process(
                 merge(
+                    btnReset.setOnClickListenerFlow()
+                        .map { CounterEvent.Reset },
                     btnDecrease.setOnClickListenerFlow()
                         .map { CounterEvent.Decrease },
                     btnIncrease.setOnClickListenerFlow()
@@ -51,13 +53,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupObserver() {
-        viewModel.state.asLiveData().observe(this, {
-            render(it)
-        })
+        viewModel
+            .state
+            .asLiveData()
+            .observe(this, {
+                render(it)
+            })
     }
 
     private fun render(state: CounterState) {
-        Log.d(MainActivity::class.java.name, "Render State $state")
+        Log.d(MainActivity::class.java.name, "State Render State $state")
         txtCounter.text = state.counter.value.toString()
 
         when (state.syncState) {

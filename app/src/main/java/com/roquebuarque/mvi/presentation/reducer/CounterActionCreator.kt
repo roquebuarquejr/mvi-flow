@@ -18,12 +18,17 @@ class CounterActionCreator @Inject constructor(
             val result = when (event) {
                 CounterEvent.Increase -> increase()
                 CounterEvent.Decrease -> decrease()
+                CounterEvent.Reset -> reset()
             }
             emit(CounterAction.Success(result) as CounterAction)
         }
             .onStart { emit(CounterAction.Executing) }
             .catch { emit(CounterAction.Error("erro inesperado")) }
             .flowOn(Dispatchers.IO)
+    }
+
+    private suspend fun reset(): Counter {
+        return repository.reset()
     }
 
     private suspend fun increase(): Counter {
